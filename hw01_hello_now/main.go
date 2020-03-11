@@ -9,11 +9,10 @@ import (
 )
 
 func main() {
-	const ntpErrorExitCode = 1
 	exactTime, err := ntp.Time("0.beevik-ntp.pool.ntp.org")
 	if err != nil {
 		fmt.Println(err)
-		os.Exit(ntpErrorExitCode)
+		os.Exit(1) //nolint:gomnd
 	}
 	fmt.Println("current time:", time.Now())
 	fmt.Println("exact time:", exactTime)
