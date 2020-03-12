@@ -7,6 +7,7 @@ import (
 	"unicode"
 )
 
+// ErrInvalidString for invalid string input
 var ErrInvalidString = errors.New("invalid string")
 
 func getRepeateTime(source string, startPos int) int {
@@ -31,6 +32,7 @@ func validateDigitPlacement(source string, pos int) error {
 	return err
 }
 
+// Unpack string based on runes count
 func Unpack(input string) (string, error) {
 	var resultBuilder strings.Builder
 	var err error
