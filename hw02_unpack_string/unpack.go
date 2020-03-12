@@ -21,7 +21,7 @@ func getRepeateTime(source string, startPos int) int {
 	return 1 //nolint:gomnd
 }
 
-func validateDigitalPlacement(source string, pos int) error {
+func validateDigitPlacement(source string, pos int) error {
 	var err error
 	if pos == 0 {
 		err = ErrInvalidString
@@ -35,13 +35,17 @@ func Unpack(input string) (string, error) {
 	var resultBuilder strings.Builder
 	var err error
 	for index, value := range input {
-		if !unicode.IsDigit(value) {
-			var repeat = getRepeateTime(input, index)
-			resultBuilder.WriteString(strings.Repeat(string(value), repeat))
-		} else {
-			err = validateDigitalPlacement(input, index)
+		if unicode.IsDigit(value) {
+			err = validateDigitPlacement(input, index)
 			if err != nil {
 				return "", err
+			}
+		} else {
+			if unicode.IsLetter(value) {
+				var repeat = getRepeateTime(input, index)
+				resultBuilder.WriteString(strings.Repeat(string(value), repeat))
+			} else {
+				return "", ErrInvalidString
 			}
 		}
 	}
