@@ -2,7 +2,6 @@ package hw02_unpack_string //nolint:golint,stylecheck
 
 import (
 	"errors"
-	"fmt"
 	"strconv"
 	"strings"
 	"unicode"
@@ -48,6 +47,5 @@ func Unpack(input string) (string, error) {
 			}
 		}
 	}
-	fmt.Println(input, resultBuilder.String())
 	return resultBuilder.String(), err
 }
