@@ -19,16 +19,16 @@ func TestUnpack(t *testing.T) {
 			expected: "aaaabccddddde",
 		},
 		{
-			input:    "abcd",
-			expected: "abcd",
+			input:    "abccd",
+			expected: "abccd",
 		},
 		{
-			input:    "45",
+			input:    "3abc",
 			expected: "",
 			err:      ErrInvalidString,
 		},
 		{
-			input:    "1a",
+			input:    "45",
 			expected: "",
 			err:      ErrInvalidString,
 		},
@@ -40,24 +40,6 @@ func TestUnpack(t *testing.T) {
 		{
 			input:    "",
 			expected: "",
-		},
-		{
-			input:    "a0b",
-			expected: "b",
-		},
-		{
-			input:    "A2",
-			expected: "AA",
-		},
-		{
-			input:    "!3",
-			expected: "",
-			err:      ErrInvalidString,
-		},
-		{
-			input:    "a!",
-			expected: "",
-			err:      ErrInvalidString,
 		},
 	} {
 		result, err := Unpack(tst.input)
