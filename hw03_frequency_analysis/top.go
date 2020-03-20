@@ -5,6 +5,11 @@ import (
 	"strings"
 )
 
+type wordStats struct {
+	word  string
+	count int
+}
+
 var valuesToReturn = 10
 
 func splitText(text string) []string {
@@ -19,12 +24,7 @@ func splitText(text string) []string {
 	return words
 }
 
-func sortWordsCounter(counter map[string]int) []string {
-	result := []string{}
-	type wordStats struct {
-		word  string
-		count int
-	}
+func wordsCounterToSortedSlice(counter map[string]int) []wordStats {
 	words := []wordStats{}
 
 	for k, v := range counter {
@@ -32,15 +32,7 @@ func sortWordsCounter(counter map[string]int) []string {
 	}
 
 	sort.Slice(words, func(i, j int) bool { return words[i].count > words[j].count })
-	for index, v := range words {
-		if index >= valuesToReturn {
-			break
-		}
-		if v.word != "" { // edge case. If input text is empty
-			result = append(result, v.word)
-		}
-	}
-	return result
+	return words
 }
 
 // Top10 function returns 10 most used words in text
@@ -51,5 +43,15 @@ func Top10(text string) []string {
 		wordsCounter[word]++
 	}
 
-	return sortWordsCounter(wordsCounter)
+	wordsWithFrequency := wordsCounterToSortedSlice(wordsCounter)
+	result := []string{}
+	for index, v := range wordsWithFrequency {
+		if index >= valuesToReturn {
+			break
+		}
+		if v.word != "" { // edge case. If input text is empty
+			result = append(result, v.word)
+		}
+	}
+	return result
 }
