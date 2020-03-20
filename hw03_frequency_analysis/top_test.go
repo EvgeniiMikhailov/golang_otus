@@ -77,6 +77,18 @@ func TestTop10(t *testing.T) {
 		assert.Len(t, get, 0)
 	})
 
+	t.Run("only punctuation in text", func(t *testing.T) {
+		text := "!"
+		get := Top10(text)
+		assert.Len(t, get, 0)
+	})
+
+	t.Run("only punctuation and spaces in text", func(t *testing.T) {
+		text := " ! "
+		get := Top10(text)
+		assert.Len(t, get, 0)
+	})
+
 	t.Run("two consecutive spaces in text", func(t *testing.T) {
 		text := "a  b"
 		get := Top10(text)
