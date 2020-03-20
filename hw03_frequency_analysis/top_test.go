@@ -7,7 +7,7 @@ import (
 )
 
 // Change to true if needed
-var taskWithAsteriskIsCompleted = false
+var taskWithAsteriskIsCompleted = true
 
 var text = `Как видите, он  спускается  по  лестнице  вслед  за  своим
 	другом   Кристофером   Робином,   головой   вниз,  пересчитывая
@@ -47,18 +47,30 @@ func TestTop10(t *testing.T) {
 	t.Run("no words in empty string", func(t *testing.T) {
 		assert.Len(t, Top10(""), 0)
 	})
+
 	t.Run("simple text line of Text", func(t *testing.T) {
-		assert.Len(t, Top10("simple text line of Text"), 0)
+		text := "simple text line of Text"
+		get := Top10(text)
+		assert.Len(t, get, 4)
+		assert.Equal(t, get[0], "text")
 	})
+
 	t.Run("text line of Text with newline", func(t *testing.T) {
-		assert.Len(t, Top10("text line of Text\nwith newline"), 0)
+		text := "text line of Text\nwith newline"
+		get := Top10(text)
+		assert.Len(t, get, 5)
+		assert.Equal(t, get[0], "text")
 	})
-	t.Run("Text line of, Text with! punctuation? symbols", func(t *testing.T) {
-		assert.Len(t, Top10("Text line of, Text with! punctuation? symbols"), 0)
+
+	t.Run("Text line of, Text with punctuation symbols", func(t *testing.T) {
+		text := "Text line of, Text with! punctuation? symbols"
+		get := Top10(text)
+		assert.Len(t, get, 6)
+		assert.Equal(t, get[0], "text")
 	})
 
 	t.Run("positive test", func(t *testing.T) {
-		t.Skip("Skipping test while in development")
+		//t.Skip("Skipping test while in development")
 		if taskWithAsteriskIsCompleted {
 			expected := []string{"он", "а", "и", "что", "ты", "не", "если", "то", "его", "кристофер", "робин", "в"}
 			assert.Subset(t, expected, Top10(text))
