@@ -113,7 +113,7 @@ func TestTop10(t *testing.T) {
 	})
 
 	t.Run("positive test", func(t *testing.T) {
-		t.Skip("Skipping test while in development")
+		//t.Skip("Skipping test while in development")
 		if taskWithAsteriskIsCompleted {
 			expected := []string{"он", "а", "и", "что", "ты", "не", "если", "то", "его", "кристофер", "робин", "в"}
 			fmt.Println(Top10(text))

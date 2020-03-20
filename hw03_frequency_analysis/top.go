@@ -14,7 +14,7 @@ type wordStats struct {
 var valuesToReturn = 10
 
 func splitText(text string) []string {
-	replaceCharacters := []string{",", ".", ",", "?", "!"}
+	replaceCharacters := []string{",", ".", ",", "?", "!", "- "}
 	space := regexp.MustCompile(`\s+`)
 
 	textWithoutRepetedSpaces := space.ReplaceAllString(text, " ")
