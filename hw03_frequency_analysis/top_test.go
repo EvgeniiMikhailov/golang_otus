@@ -1,7 +1,6 @@
 package hw03_frequency_analysis //nolint:golint
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -116,7 +115,6 @@ func TestTop10(t *testing.T) {
 		//t.Skip("Skipping test while in development")
 		if taskWithAsteriskIsCompleted {
 			expected := []string{"он", "а", "и", "что", "ты", "не", "если", "то", "его", "кристофер", "робин", "в"}
-			fmt.Println(Top10(text))
 			assert.Subset(t, expected, Top10(text))
 		} else {
 			expected := []string{"он", "и", "а", "что", "ты", "не", "если", "-", "то", "Кристофер"}

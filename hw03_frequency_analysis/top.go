@@ -24,7 +24,13 @@ func splitText(text string) []string {
 	}
 
 	words := strings.Split(strings.ToLower(text), " ")
-	return words
+	wordsWithoutEmptyStrings := []string{}
+	for _, word := range words {
+		if word != "" {
+			wordsWithoutEmptyStrings = append(wordsWithoutEmptyStrings, word)
+		}
+	}
+	return wordsWithoutEmptyStrings
 }
 
 func wordsCounterToSortedSlice(counter map[string]int) []wordStats {
@@ -43,9 +49,7 @@ func Top10(text string) []string {
 	words := splitText(text)
 	wordsCounter := map[string]int{}
 	for _, word := range words {
-		if word != "" {
-			wordsCounter[word]++
-		}
+		wordsCounter[word]++
 	}
 
 	wordsWithFrequency := wordsCounterToSortedSlice(wordsCounter)
