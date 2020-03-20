@@ -13,19 +13,12 @@ func splitText(text string) []string {
 		text = strings.ReplaceAll(text, char, "")
 	}
 
-	splittedText := strings.Split(strings.ToLower(text), " ")
-	return splittedText
-}
-
-func prettyPrint(slice []string) {
-	for i, v := range slice {
-		fmt.Println(i, v)
-	}
+	words := strings.Split(strings.ToLower(text), " ")
+	return words
 }
 
 func Top10(text string) []string {
-	splittedText := splitText(text)
-	fmt.Println(splittedText)
-	prettyPrint(splittedText)
+	words := splitText(text)
+	fmt.Println(words)
 	return nil
 }
