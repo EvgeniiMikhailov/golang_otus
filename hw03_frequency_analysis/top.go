@@ -1,6 +1,7 @@
 package hw03_frequency_analysis //nolint:golint,stylecheck
 
 import (
+	"regexp"
 	"sort"
 	"strings"
 )
@@ -14,8 +15,10 @@ var valuesToReturn = 10
 
 func splitText(text string) []string {
 	replaceCharacters := []string{",", ".", ",", "?", "!"}
+	space := regexp.MustCompile(`\s+`)
 
-	text = strings.ReplaceAll(text, "\n", " ")
+	textWithoutRepetedSpaces := space.ReplaceAllString(text, " ")
+	text = strings.ReplaceAll(textWithoutRepetedSpaces, "\n", " ")
 	for _, char := range replaceCharacters {
 		text = strings.ReplaceAll(text, char, "")
 	}
@@ -40,7 +43,9 @@ func Top10(text string) []string {
 	words := splitText(text)
 	wordsCounter := map[string]int{}
 	for _, word := range words {
-		wordsCounter[word]++
+		if word != "" {
+			wordsCounter[word]++
+		}
 	}
 
 	wordsWithFrequency := wordsCounterToSortedSlice(wordsCounter)
@@ -49,9 +54,7 @@ func Top10(text string) []string {
 		if index >= valuesToReturn {
 			break
 		}
-		if v.word != "" { // edge case. If input text is empty
-			result = append(result, v.word)
-		}
+		result = append(result, v.word)
 	}
 	return result
 }
