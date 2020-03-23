@@ -7,7 +7,7 @@ import (
 )
 
 // Change to true if needed
-var taskWithAsteriskIsCompleted = false
+var taskWithAsteriskIsCompleted = true
 
 var text = `Как видите, он  спускается  по  лестнице  вслед  за  своим
 	другом   Кристофером   Робином,   головой   вниз,  пересчитывая
@@ -43,12 +43,88 @@ var text = `Как видите, он  спускается  по  лестни�
 	посидеть у огня и послушать какую-нибудь интересную сказку.
 		В этот вечер...`
 
+func contains(words []string, target string) bool {
+	for _, word := range words {
+		if word == target {
+			return true
+		}
+	}
+	return false
+}
+
 func TestTop10(t *testing.T) {
 	t.Run("no words in empty string", func(t *testing.T) {
 		assert.Len(t, Top10(""), 0)
 	})
 
+	t.Run("simple text line of Text", func(t *testing.T) {
+		text := "simple text line of Text"
+		get := Top10(text)
+		assert.Len(t, get, 4)
+		assert.Equal(t, get[0], "text")
+	})
+
+	t.Run("simple text line of Text", func(t *testing.T) {
+		text := "simple text line of Text"
+		get := Top10(text)
+		assert.Len(t, get, 4)
+		assert.Equal(t, get[0], "text")
+	})
+
+	t.Run("only space in text", func(t *testing.T) {
+		text := " "
+		get := Top10(text)
+		assert.Len(t, get, 0)
+	})
+
+	t.Run("only punctuation in text", func(t *testing.T) {
+		text := "!"
+		get := Top10(text)
+		assert.Len(t, get, 0)
+	})
+
+	t.Run("only punctuation and spaces in text", func(t *testing.T) {
+		text := " ! "
+		get := Top10(text)
+		assert.Len(t, get, 0)
+	})
+
+	t.Run("two consecutive spaces in text", func(t *testing.T) {
+		text := "a  b"
+		get := Top10(text)
+		assert.Len(t, get, 2)
+	})
+
+	t.Run("Text line of, Text with punctuation symbols", func(t *testing.T) {
+		text := "Text line of, Text with! punctuation? symbols"
+		get := Top10(text)
+		assert.Len(t, get, 6)
+		assert.Equal(t, get[0], "text")
+	})
+
+	t.Run("test 11 words", func(t *testing.T) {
+		text := "a a b b c c d d e e f f g g h h i i j j k"
+		get := Top10(text)
+		assert.Len(t, get, 10)
+		assert.False(t, contains(get, "k"))
+	})
+
+	t.Run("test order", func(t *testing.T) {
+		text := "a a a a a a a a a a b b b b b b b b b c c c c c c c c d d d d d d d e e e e e e f f f f f g g g g h h h i i j"
+		get := Top10(text)
+		assert.Len(t, get, 10)
+		assert.Equal(t, get, []string{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j"})
+	})
+
+	t.Run("test unicode", func(t *testing.T) {
+		text := "Привет мир привет!"
+		get := Top10(text)
+		assert.Len(t, get, 2)
+		assert.Equal(t, get, []string{"привет", "мир"})
+	})
+
 	t.Run("positive test", func(t *testing.T) {
+		//t.Skip("Skipping test while in development")
 		if taskWithAsteriskIsCompleted {
 			expected := []string{"он", "а", "и", "что", "ты", "не", "если", "то", "его", "кристофер", "робин", "в"}
 			assert.Subset(t, expected, Top10(text))
