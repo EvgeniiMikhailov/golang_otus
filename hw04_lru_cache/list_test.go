@@ -102,6 +102,16 @@ func TestList(t *testing.T) {
 		require.Equal(t, 2, l.Back().Value)
 	})
 
+	t.Run("move to front single item", func(t *testing.T) {
+		l := NewList()
+
+		l.PushFront(0)          // [0]
+		l.MoveToFront(l.Back()) // [0]
+		require.Equal(t, l.Len(), 1)
+		require.Equal(t, 0, l.Front().Value)
+		require.Equal(t, 0, l.Back().Value)
+	})
+
 	t.Run("move to front back item", func(t *testing.T) {
 		l := NewList()
 
