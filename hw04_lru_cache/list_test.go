@@ -112,6 +112,9 @@ func TestList(t *testing.T) {
 		require.Equal(t, l.Len(), 3)
 		require.Equal(t, 2, l.Front().Value)
 		require.Equal(t, 0, l.Front().Prev.Value)
+		require.Equal(t, 1, l.Front().Prev.Prev.Value)
+		require.Equal(t, 2, l.Back().Next.Next.Value)
+		require.Equal(t, 0, l.Back().Next.Value)
 		require.Equal(t, 1, l.Back().Value)
 	})
 
@@ -125,6 +128,9 @@ func TestList(t *testing.T) {
 		require.Equal(t, l.Len(), 3)
 		require.Equal(t, 1, l.Front().Value)
 		require.Equal(t, 0, l.Front().Prev.Value)
+		require.Equal(t, 2, l.Front().Prev.Prev.Value)
+		require.Equal(t, 1, l.Back().Next.Next.Value)
+		require.Equal(t, 0, l.Back().Next.Value)
 		require.Equal(t, 2, l.Back().Value)
 	})
 
@@ -138,6 +144,9 @@ func TestList(t *testing.T) {
 		require.Equal(t, l.Len(), 3)
 		require.Equal(t, 0, l.Front().Value)
 		require.Equal(t, 1, l.Front().Prev.Value)
+		require.Equal(t, 2, l.Front().Prev.Prev.Value)
+		require.Equal(t, 0, l.Back().Next.Next.Value)
+		require.Equal(t, 1, l.Back().Next.Value)
 		require.Equal(t, 2, l.Back().Value)
 	})
 
