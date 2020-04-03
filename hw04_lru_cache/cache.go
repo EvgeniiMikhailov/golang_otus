@@ -3,18 +3,18 @@ package hw04_lru_cache //nolint:golint,stylecheck
 type Key string
 
 type Cache interface {
-	Set(key string, value interface{}) bool
-	Get(key string) (interface{}, bool)
+	Set(key Key, value interface{}) bool
+	Get(key Key) (interface{}, bool)
 	Clear()
 }
 
 type lruCache struct {
 	capacity int
 	queue    list
-	items    map[string]*listItem
+	items    map[Key]*listItem
 }
 
-func (c *lruCache) Set(key string, value interface{}) bool {
+func (c *lruCache) Set(key Key, value interface{}) bool {
 	cachedItem, ok := c.items[key]
 	record := cacheItem{key: key, value: value}
 
@@ -32,7 +32,7 @@ func (c *lruCache) Set(key string, value interface{}) bool {
 	return ok
 }
 
-func (c *lruCache) Get(key string) (interface{}, bool) {
+func (c *lruCache) Get(key Key) (interface{}, bool) {
 	cachedItem, ok := c.items[key]
 	if ok {
 		c.queue.MoveToFront(cachedItem)
@@ -42,17 +42,18 @@ func (c *lruCache) Get(key string) (interface{}, bool) {
 }
 
 func (c *lruCache) Clear() {
-
+	c.items = make(map[Key]*listItem)
+	c.queue.head, c.queue.tail, c.queue.length = nil, nil, 0
 }
 
 type cacheItem struct {
-	key   string
+	key   Key
 	value interface{}
 }
 
 func NewCache(capacity int) Cache {
 	cache := &lruCache{}
 	cache.capacity = capacity
-	cache.items = make(map[string]*listItem)
+	cache.items = make(map[Key]*listItem)
 	return cache
 }
