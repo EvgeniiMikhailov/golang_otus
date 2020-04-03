@@ -11,19 +11,21 @@ type Cache interface {
 type lruCache struct {
 	capacity int
 	queue    list
-	items    map[string]listItem
+	items    map[string]*listItem
 }
 
 func (c *lruCache) Set(key string, value interface{}) bool {
 	cachedItem, ok := c.items[key]
-	newCacheItem := cacheItem{key: key, value: value}
+	record := cacheItem{key: key, value: value}
+
 	if ok {
-		c.queue.MoveToFront(&cachedItem)
-		cachedItem.Value = newCacheItem
+		c.queue.MoveToFront(cachedItem)
+		cachedItem.Value = record
 	} else {
-		cachedItem = listItem{Value: newCacheItem}
-		c.queue.PushFront(cachedItem)
+		c.queue.PushFront(record)
+		c.items[key] = c.queue.Front()
 		if c.queue.Len() > c.capacity {
+			delete(c.items, c.queue.Back().Value.(cacheItem).key)
 			c.queue.Remove(c.queue.Back())
 		}
 	}
@@ -31,7 +33,12 @@ func (c *lruCache) Set(key string, value interface{}) bool {
 }
 
 func (c *lruCache) Get(key string) (interface{}, bool) {
-	return 0, true
+	cachedItem, ok := c.items[key]
+	if ok {
+		c.queue.MoveToFront(cachedItem)
+		return c.queue.Front().Value.(cacheItem).value, ok
+	}
+	return nil, ok
 }
 
 func (c *lruCache) Clear() {
@@ -46,6 +53,6 @@ type cacheItem struct {
 func NewCache(capacity int) Cache {
 	cache := &lruCache{}
 	cache.capacity = capacity
-	cache.items = make(map[string]listItem)
+	cache.items = make(map[string]*listItem)
 	return cache
 }
