@@ -10,7 +10,7 @@ type Cache interface {
 
 type lruCache struct {
 	capacity int
-	queue    list
+	queue    List
 	items    map[Key]*listItem
 }
 
@@ -43,7 +43,7 @@ func (c *lruCache) Get(key Key) (interface{}, bool) {
 
 func (c *lruCache) Clear() {
 	c.items = make(map[Key]*listItem)
-	c.queue.head, c.queue.tail, c.queue.length = nil, nil, 0
+	c.queue = NewList()
 }
 
 type cacheItem struct {
@@ -52,8 +52,6 @@ type cacheItem struct {
 }
 
 func NewCache(capacity int) Cache {
-	cache := &lruCache{}
-	cache.capacity = capacity
-	cache.items = make(map[Key]*listItem)
+	cache := &lruCache{capacity: capacity, queue: NewList(), items: make(map[Key]*listItem)}
 	return cache
 }
