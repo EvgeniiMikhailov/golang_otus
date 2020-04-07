@@ -20,6 +20,67 @@ func TestCache(t *testing.T) {
 		require.False(t, ok)
 	})
 
+	t.Run("write and read single element", func(t *testing.T) {
+		c := NewCache(10)
+
+		wasInCache := c.Set("a", 1)
+		require.False(t, wasInCache)
+
+		value, ok := c.Get("a")
+		require.True(t, ok)
+		require.Equal(t, 1, value)
+	})
+
+	t.Run("eviction first element", func(t *testing.T) {
+		c := NewCache(2)
+
+		wasInCache := c.Set("a", 1)
+		require.False(t, wasInCache)
+
+		wasInCache = c.Set("b", 2)
+		require.False(t, wasInCache)
+
+		wasInCache = c.Set("c", 3)
+		require.False(t, wasInCache)
+
+		value, ok := c.Get("a")
+		require.False(t, ok)
+		require.Nil(t, value)
+
+		value, ok = c.Get("b")
+		require.True(t, ok)
+		require.Equal(t, 2, value)
+
+		value, ok = c.Get("c")
+		require.True(t, ok)
+		require.Equal(t, 3, value)
+	})
+
+	t.Run("eviction second element", func(t *testing.T) {
+		c := NewCache(2)
+
+		wasInCache := c.Set("a", 1)
+		require.False(t, wasInCache)
+
+		wasInCache = c.Set("b", 2)
+		require.False(t, wasInCache)
+
+		value, ok := c.Get("a")
+		require.True(t, ok)
+		require.Equal(t, 1, value)
+
+		wasInCache = c.Set("c", 3)
+		require.False(t, wasInCache)
+
+		value, ok = c.Get("b")
+		require.False(t, ok)
+		require.Nil(t, value)
+
+		value, ok = c.Get("c")
+		require.True(t, ok)
+		require.Equal(t, 3, value)
+	})
+
 	t.Run("simple", func(t *testing.T) {
 		c := NewCache(5)
 
@@ -50,7 +111,19 @@ func TestCache(t *testing.T) {
 	})
 
 	t.Run("purge logic", func(t *testing.T) {
-		// Write me
+		c := NewCache(10)
+
+		wasInCache := c.Set("a", 1)
+		require.False(t, wasInCache)
+
+		value, ok := c.Get("a")
+		require.True(t, ok)
+		require.Equal(t, 1, value)
+
+		c.Clear()
+		value, ok = c.Get("a")
+		require.False(t, ok)
+		require.Nil(t, value)
 	})
 }
 
