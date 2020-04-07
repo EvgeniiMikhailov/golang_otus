@@ -25,11 +25,15 @@ func (c *lruCache) Set(key Key, value interface{}) bool {
 		c.queue.PushFront(record)
 		c.items[key] = c.queue.Front()
 		if c.queue.Len() > c.capacity {
-			delete(c.items, c.queue.Back().Value.(cacheItem).key)
-			c.queue.Remove(c.queue.Back())
+			c.removeLastRecord()
 		}
 	}
 	return ok
+}
+
+func (c *lruCache) removeLastRecord() {
+	delete(c.items, c.queue.Back().Value.(cacheItem).key)
+	c.queue.Remove(c.queue.Back())
 }
 
 func (c *lruCache) Get(key Key) (interface{}, bool) {
