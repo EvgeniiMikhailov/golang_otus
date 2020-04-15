@@ -26,8 +26,8 @@ func Run(tasks []Task, N int, M int) error { //nolint:gocritic
 		tasksCh <- task
 	}
 
-	wg.Wait()
 	close(tasksCh)
+	wg.Wait()
 
 	if atomic.LoadInt32(&runErrorssCount) > int32(M) {
 		return ErrErrorsLimitExceeded
