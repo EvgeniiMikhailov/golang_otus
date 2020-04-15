@@ -21,8 +21,8 @@ func Run(tasks []Task, N int, M int) error { //nolint:gocritic
 		go startWorker(wg, tasksCh, &runErrorssCount, M)
 	}
 
+	wg.Add(N)
 	for _, task := range tasks {
-		wg.Add(1) //nolint:gomnd
 		tasksCh <- task
 	}
 
@@ -36,14 +36,14 @@ func Run(tasks []Task, N int, M int) error { //nolint:gocritic
 }
 
 func startWorker(wg *sync.WaitGroup, tasks <-chan Task, runErrorssCount *int32, maxErrors int) {
+	defer wg.Done()
 	for task := range tasks {
-		if atomic.LoadInt32(runErrorssCount) <= int32(maxErrors) {
-			err := task()
-			if err != nil {
-				atomic.AddInt32(runErrorssCount, 1)
-			}
+		if atomic.LoadInt32(runErrorssCount) > int32(maxErrors) {
+			continue
 		}
-
-		wg.Done()
+		err := task()
+		if err != nil {
+			atomic.AddInt32(runErrorssCount, 1)
+		}
 	}
 }
