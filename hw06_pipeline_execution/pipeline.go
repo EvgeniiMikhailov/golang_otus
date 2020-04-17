@@ -10,6 +10,10 @@ type (
 type Stage func(in In) (out Out)
 
 func ExecutePipeline(in In, done In, stages ...Stage) Out {
-	// Place your code here
-	return nil
+	switch len(stages) {
+	case 1:
+		return stages[0](in)
+	default:
+		return ExecutePipeline(stages[0](in), done, stages[1:]...)
+	}
 }
