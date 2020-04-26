@@ -9,11 +9,32 @@ type (
 
 type Stage func(in In) (out Out)
 
+func stageWrapper(in In, done In, stage Stage) Out {
+	closableIn := make(Bi)
+
+	go func(closableIn Bi, oldIn In) {
+		defer close(closableIn)
+
+		for {
+			select {
+			case <-done:
+				return
+			case v, ok := <-oldIn:
+				if !ok {
+					return
+				}
+				closableIn <- v
+			}
+		}
+	}(closableIn, in)
+	return stage(closableIn)
+}
+
 func ExecutePipeline(in In, done In, stages ...Stage) Out {
 	switch len(stages) {
 	case 1:
-		return stages[0](in)
+		return stageWrapper(in, done, stages[0])
 	default:
-		return ExecutePipeline(stages[0](in), done, stages[1:]...)
+		return ExecutePipeline(stageWrapper(in, done, stages[0]), done, stages[1:]...)
 	}
 }
