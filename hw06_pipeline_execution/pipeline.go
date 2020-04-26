@@ -32,7 +32,7 @@ func stageWrapper(in In, done In, stage Stage) Out {
 
 func ExecutePipeline(in In, done In, stages ...Stage) Out {
 	switch len(stages) {
-	case 1:
+	case 1: //nolint:gomnd
 		return stageWrapper(in, done, stages[0])
 	default:
 		return ExecutePipeline(stageWrapper(in, done, stages[0]), done, stages[1:]...)
