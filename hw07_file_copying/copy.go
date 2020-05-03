@@ -30,7 +30,10 @@ func openSourceFileWithSeek(fromPath string, offset int64) (*os.File, error) {
 	}
 
 	if offset != 0 {
-		source.Seek(offset, 0)
+		_, err = source.Seek(offset, 0)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return source, nil
@@ -50,16 +53,16 @@ func calculateActualLimit(source *os.File, limit, offset int64) int64 {
 
 func Copy(fromPath string, toPath string, offset, limit int64) error {
 	source, err := openSourceFileWithSeek(fromPath, offset)
-	defer source.Close()
 	if err != nil {
 		return err
 	}
+	defer source.Close()
 
 	destination, err := os.Create(toPath)
-	defer destination.Close()
 	if err != nil {
 		return err
 	}
+	defer destination.Close()
 
 	_, err = io.CopyN(destination, source, calculateActualLimit(source, limit, offset))
 	if err == io.EOF {
