@@ -36,14 +36,14 @@ func openSourceFileWithSeek(fromPath string, offset int64) (*os.File, error) {
 	return source, nil
 }
 
-func calculateActualLimit(source *os.File, limit int64) int64 {
+func calculateActualLimit(source *os.File, limit, offset int64) int64 {
 	sourceFI, err := source.Stat()
 	if err != nil {
 		return 0
 	}
 	fileSize := sourceFI.Size()
-	if limit == 0 || limit > fileSize {
-		limit = fileSize
+	if limit == 0 || limit > fileSize-offset {
+		limit = fileSize - offset
 	}
 	return limit
 }
@@ -61,7 +61,7 @@ func Copy(fromPath string, toPath string, offset, limit int64) error {
 		return err
 	}
 
-	_, err = io.CopyN(destination, source, calculateActualLimit(source, limit))
+	_, err = io.CopyN(destination, source, calculateActualLimit(source, limit, offset))
 	if err == io.EOF {
 		return nil
 	}
