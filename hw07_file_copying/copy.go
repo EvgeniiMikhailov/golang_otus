@@ -4,6 +4,8 @@ import (
 	"errors"
 	"io"
 	"os"
+
+	"github.com/cheggaaa/pb/v3"
 )
 
 var (
@@ -64,13 +66,19 @@ func Copy(fromPath string, toPath string, offset, limit int64) error {
 	}
 	defer destination.Close()
 
-	_, err = io.CopyN(destination, source, calculateActualLimit(source, limit, offset))
+	limit = calculateActualLimit(source, limit, offset)
+
+	bar := pb.Full.Start64(limit)
+	barReader := bar.NewProxyReader(source)
+
+	_, err = io.CopyN(destination, barReader, limit)
 	if err == io.EOF {
 		return nil
 	}
 	if err != nil {
 		return err
 	}
+	bar.Finish()
 
 	return nil
 }
