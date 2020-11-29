@@ -7,7 +7,7 @@
 6) [«Пайплайн»](./hw06_pipeline_execution)
 7) [«Утилита для копирования файлов»](./hw07_file_copying)
 8) [«Утилита envdir»](./hw08_envdir_tool)
-9) [«Генератор валидаторов»](./hw09_generator_of_validators)
+9) [«Валидатор структур»](./hw09_struct_validator)
 10) [«Оптимизация программы»](./hw10_program_optimization)
 11) [«Клиент TELNET»](./hw11_telnet_client)
 12) [«Заготовка сервиса Календарь»](./hw12_13_14_15_calendar/docs/12_README.md)
@@ -18,3 +18,8 @@
 
 ---
 [Инструкция по сдаче ДЗ](https://github.com/OtusGolang/home_work/wiki#%D0%A1%D1%82%D1%83%D0%B4%D0%B5%D0%BD%D1%82%D0%B0%D0%BC).
+
+---
+Авторы ДЗ:
+- [Дмитрий Смаль](https://github.com/mialinx)
+- [Антон Телышев](https://github.com/Antonboom)
